@@ -1,0 +1,26 @@
+nslookup google.com --> Schaut ob der DNS eine IP zurückgibt.
+
+curl -v https://example.com --> curl ist ein Tool, um HTTP/HTTPS-Anfragen zu machen.   
+
+-v steht für verbose.
+Das bedeutet:
+
+👉 Du bekommst detaillierte Ausgabe über den Verbindungsaufbau.
+
+1️⃣ DNS-Auflösung (welche IP wird genutzt)
+2️⃣ TCP-Verbindung
+3️⃣ TLS-Handshake
+4️⃣ HTTP-Request
+5️⃣ HTTP-Response + Statuscode
+
+
+ip a --> Zeigt die eigenen IP's an.
+
+ss -tulnp --> ss steht für Socket statistic und zeigt dir offene Ports, aktive Verbindungen und welche Programme diese benutzen.
+
+Option	Bedeutung
+-t	TCP anzeigen
+-u	UDP anzeigen
+-l	Nur LISTEN-Sockets
+-n	Numerisch (keine Namensauflösung)
+-p	Prozess anzeigen (PID/Programm)

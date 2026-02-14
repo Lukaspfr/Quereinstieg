@@ -1,0 +1,5 @@
+ls -> Liste der Dateien in der current directory
+pwd -> "Print Working Directory
+touch -> Datei "anfassen" (Datei erstellen)
+cat -> concatenate zeigt den Inhalt von Dateien in dem Terminal an.
+
