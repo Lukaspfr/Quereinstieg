@@ -100,4 +100,297 @@ Python Server starten:
 | `python3 -m http.server --directory /pfad` | Python 3       | Bestimmtes Verzeichnis freigeben  | Anderes Root-Verzeichnis |
 
 
+Ordnerstruktur durchsuchen:
+
+| Teil               | Bedeutung                                           | Beispiel         |
+| ------------------ | --------------------------------------------------- | ---------------- |
+| `find <pfad>`      | Startpunkt der Suche                                | `find ~/lab/fs`  |
+| `-name 'PATTERN'`  | Dateiname matcht (Shell-Pattern)                    | `-name '*.conf'` |
+| `-iname 'PATTERN'` | wie `-name`, aber case-insensitive                  | `-iname '*.TXT'` |
+| `-type f`          | nur Dateien                                         | `-type f`        |
+| `-type d`          | nur Ordner                                          | `-type d`        |
+| `-maxdepth N`      | **maximale** Tiefe ab Startpunkt (0=nur Startpunkt) | `-maxdepth 2`    |
+| `-mindepth N`      | minimale Tiefe (z.B. 1=ohne Startpunkt)             | `-mindepth 1`    |
+| `-print`           | Ausgabe (Standard, kann man weglassen)              | `-print`         |
+
+Wichtige Ergänzung zum durchsuchen:
+
+|          Wert | Was wird durchsucht? (Startpunkt = Tiefe 0) |
+| ------------: | ------------------------------------------- |
+| `-maxdepth 0` | nur der Startordner selbst                  |
+| `-maxdepth 1` | Startordner + direkte Einträge darin        |
+| `-maxdepth 2` | + eine Ebene tiefer (Enkel)                 |
+| `-maxdepth 3` | + noch eine Ebene tiefer                    |
+
+
+Concatenate Befehl:
+
+| Command           | Zweck                                   | Häufige Optionen                                                                       | Beispiele                                          |
+| ----------------- | --------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `cat FILE`        | Datei komplett ausgeben                 | `-n` Zeilen nummerieren, `-A` Steuerzeichen sichtbar, `-s` leere Zeilen zusammenfassen | `cat sample.txt` · `cat -n sample.txt`             |
+| `cat FILE1 FILE2` | Dateien hintereinander ausgeben         | —                                                                                      | `cat a.txt b.txt`                                  |
+| `cat > FILE`      | stdin in Datei schreiben (überschreibt) | —                                                                                      | `cat > notes.txt` (dann tippen, Ende mit `Ctrl+D`) |
+| `cat >> FILE`     | stdin an Datei anhängen                 | —                                                                                      | `cat >> notes.txt`                                 |
+Cat + Here - Doc (Skribte schreiben):
+
+| Muster                                     | Was macht’s?                                                         | Wann nutzen?                                                  | Beispiel                   |
+| ------------------------------------------ | -------------------------------------------------------------------- | ------------------------------------------------------------- | -------------------------- |
+| `cat > file <<EOF ... EOF`                 | schreibt Block in Datei (**überschreibt**)                           | neue Datei/neu erzeugen                                       | `cat > hello.sh <<EOF` …   |
+| `cat >> file <<EOF ... EOF`                | hängt Block an Datei an (**append**)                                 | Config erweitern                                              | `cat >> ~/.bashrc <<EOF` … |
+| `<<'EOF'` (quoted)                         | **keine Expansion** im Block (`$VAR`, `$(cmd)`, `\` bleiben literal) | wenn du Variablen/`$(...)` **im Script stehen lassen** willst | `cat > s.sh <<'EOF'`       |
+| `<<EOF` (unquoted)                         | Expansion **passiert beim Schreiben**                                | wenn du Werte **jetzt einfügen** willst (Template)            | `cat > file <<EOF`         |
+| `<<-EOF`                                   | erlaubt Einrückung mit **Tabs** (Tabs werden entfernt)               | sauber eingerückte Here-Docs im Code                          | `cat <<-EOF`               |
+| `cat > file <<EOF` + `#!/usr/bin/env bash` | erzeugt ausführbares Script (mit Shebang)                            | Bash-Skripte                                                  | siehe unten                |
+| `chmod +x file`                            | Script ausführbar machen                                             | immer nach Script-Erzeugung                                   | `chmod +x ~/bin/hello`     |
+
+Word count Befehl:
+
+| Command      | Zweck                        | Optionen                                           | Beispiele          |     |        |
+| ------------ | ---------------------------- | -------------------------------------------------- | ------------------ | --- | ------ |
+| `wc FILE`    | Zeilen, Wörter, Bytes zählen | `-l` Zeilen, `-w` Wörter, `-c` Bytes, `-m` Zeichen | `wc sample.txt`    |     |        |
+| `wc -l FILE` | nur Zeilen zählen            | `-l`                                               | `wc -l sample.txt` |     |        |
+| `wc -w FILE` | nur Wörter zählen            | `-w`                                               | `wc -w sample.txt` |     |        |
+| `wc -c FILE` | Bytes zählen                 | `-c`                                               | `wc -c sample.txt` |     |        |
+| `cmd         | wc -l`                       | wie viele Zeilen Output                            | `-l`               | `ls | wc -l` |
+
+
+echo:
+
+| Command             | Zweck                               | Optionen/Notizen                     | Beispiele                |
+| ------------------- | ----------------------------------- | ------------------------------------ | ------------------------ |
+| `echo TEXT`         | Text ausgeben                       | default: am Ende newline             | `echo hello`             |
+| `echo -n TEXT`      | ohne abschließenden newline         | `-n`                                 | `echo -n "prompt: "`     |
+| `echo -e "a\nb"`    | Escapes interpretieren (`\n`, `\t`) | `-e` (Bash), nicht überall identisch | `echo -e "line1\nline2"` |
+| `echo TEXT > FILE`  | in Datei schreiben (überschreibt)   | `>` überschreibt                     | `echo hi > file.txt`     |
+| `echo TEXT >> FILE` | an Datei anhängen                   | `>>` hängt an                        | `echo more >> file.txt`  |
+
+
+Head:
+
+| Command          | Zweck           | Optionen              | Beispiele               |         |       |
+| ---------------- | --------------- | --------------------- | ----------------------- | ------- | ----- |
+| `head FILE`      | erste 10 Zeilen | —                     | `head sample.txt`       |         |       |
+| `head -n N FILE` | erste N Zeilen  | `-n`                  | `head -n 2 sample.txt`  |         |       |
+| `head -c N FILE` | erste N Bytes   | `-c`                  | `head -c 20 sample.txt` |         |       |
+| `cmd             | head`           | nur Anfang vom Output | —                       | `ps aux | head` |
+
+tail:
+
+| Command          | Zweck                                  | Optionen   | Beispiele                 |
+| ---------------- | -------------------------------------- | ---------- | ------------------------- |
+| `tail FILE`      | letzte 10 Zeilen                       | —          | `tail sample.txt`         |
+| `tail -n N FILE` | letzte N Zeilen                        | `-n`       | `tail -n 2 sample.txt`    |
+| `tail -c N FILE` | letzte N Bytes                         | `-c`       | `tail -c 50 sample.txt`   |
+| `tail -f FILE`   | Datei live “mitlesen” (Log-Streaming)  | `-f`       | `tail -f /var/log/syslog` |
+| `tail -F FILE`   | wie `-f`, aber robust bei Log-Rotation | `-F` (GNU) | `tail -F app.log`         |
+
+
+Links erstellen (ln):
+
+| Command            | Zweck                                                   | Wichtige Optionen                                             | Beispiel                        |
+| ------------------ | ------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------- |
+| `ln SRC DEST`      | **Hardlink** erstellen (2. Name → gleiche Inode)        | `-f` überschreibt Ziel, `-n` (bei Symlink-Ziel), `-v` verbose | `ln a.txt a.hard`               |
+| `ln -s SRC DEST`   | **Symlink/Softlink** erstellen (Pfad-Verknüpfung)       | `-s` symlink, `-f` überschreibt Ziel, `-v` verbose            | `ln -s a.txt a.soft`            |
+| `ln -sfn SRC DEST` | Symlink **erzwingen/ersetzen** (häufig bei Deployments) | `-s` symlink, `-f` force, `-n` treat dest as file             | `ln -sfn /opt/app/v2 current`   |
+| `ln SRC DIR/`      | Hardlink in ein Verzeichnis legen (Name bleibt gleich)  | —                                                             | `ln a.txt ~/backup/`            |
+| `ln -s SRC DIR/`   | Symlink in ein Verzeichnis legen                        | —                                                             | `ln -s /var/log/syslog ~/logs/` |
+
+
+AUFLISTEN (ls):
+
+| Command   | Zweck                                       | Wichtige Optionen | Beispiel           |
+| --------- | ------------------------------------------- | ----------------- | ------------------ |
+| `ls`      | Dateien/Ordner im aktuellen Verzeichnis     | —                 | `ls`               |
+| `ls PATH` | Inhalt eines Pfads anzeigen                 | —                 | `ls ~/lab/fs/a`    |
+| `ls -l`   | Long Listing (Rechte, Owner, Größe, Zeit)   | `-l`              | `ls -l`            |
+| `ls -a`   | auch versteckte Dateien (`.` Dateien)       | `-a`              | `ls -a`            |
+| `ls -la`  | long + hidden                               | `-l -a`           | `ls -la`           |
+| `ls -h`   | “human readable” Größen (nur mit `-l`)      | `-h`              | `ls -lh`           |
+| `ls -t`   | nach Zeit sortieren (neueste zuerst)        | `-t`              | `ls -lt`           |
+| `ls -r`   | Sortierreihenfolge umdrehen                 | `-r`              | `ls -ltr`          |
+| `ls -R`   | rekursiv (Unterordner mitlisten)            | `-R`              | `ls -R ~/lab/fs`   |
+| `ls -i`   | Inode-Nummern anzeigen                      | `-i`              | `ls -i sample.txt` |
+| `ls -li`  | Inode + Long Listing (zeigt auch Linkcount) | `-l -i`           | `ls -li sample.*`  |
+
+Stat:
+
+stat zeigt dir detaillierte Metadaten zu einer Datei/einem Ordner – also alles, was über ls -l hinausgeht: Größe in Bytes, Inode, Device, genaue Rechte (numerisch & symbolisch), Linkcount, Besitzer/Gruppe, und die Zeitstempel atime/mtime/ctime.
+
+| Befehl                 | Zweck                                    | Beispiel                              |
+| ---------------------- | ---------------------------------------- | ------------------------------------- |
+| `stat FILE`            | Vollständige Metadaten anzeigen          | `stat secret.txt`                     |
+| `stat DIR`             | Metadaten eines Ordners anzeigen         | `stat ~/lab/perms`                    |
+| `stat -c FORMAT FILE`  | **Custom Output** (nur bestimmte Felder) | `stat -c "%a %U:%G %s %n" secret.txt` |
+| `stat -c "%a" FILE`    | Rechte **numerisch** (chmod-Style)       | `stat -c "%a" secret.txt`             |
+| `stat -c "%A" FILE`    | Rechte **symbolisch** (`-rw-r--r--`)     | `stat -c "%A" secret.txt`             |
+| `stat -c "%U %G" FILE` | Owner / Group                            | `stat -c "%U %G" secret.txt`          |
+| `stat -c "%s" FILE`    | Größe in Bytes                           | `stat -c "%s" secret.txt`             |
+| `stat -c "%i" FILE`    | Inode-Nummer                             | `stat -c "%i" secret.txt`             |
+| `stat -c "%h" FILE`    | Hardlink-Count                           | `stat -c "%h" secret.txt`             |
+| `stat -c "%y" FILE`    | mtime (letzte Inhaltsänderung)           | `stat -c "%y" secret.txt`             |
+| `stat -c "%x" FILE`    | atime (letzter Zugriff/Lesen)            | `stat -c "%x" secret.txt`             |
+| `stat -c "%z" FILE`    | ctime (Metadatenänderung)                | `stat -c "%z" secret.txt`             |
+
+Change mod:
+
+| Befehl                 | Effekt                                                             | Beispiel                   |
+| ---------------------- | ------------------------------------------------------------------ | -------------------------- |
+| `chmod u+x FILE`       | Owner bekommt execute dazu                                         | `chmod u+x script.sh`      |
+| `chmod u-x FILE`       | Owner verliert execute                                             | `chmod u-x script.sh`      |
+| `chmod g+w FILE`       | Gruppe darf schreiben                                              | `chmod g+w secret.txt`     |
+| `chmod o-r FILE`       | Others dürfen nicht lesen                                          | `chmod o-r secret.txt`     |
+| `chmod a+r FILE`       | alle dürfen lesen                                                  | `chmod a+r notes.txt`      |
+| `chmod u=rw,go=r FILE` | Rechte exakt setzen                                                | `chmod u=rw,go=r file.txt` |
+| `chmod -R g+rX DIR`    | rekursiv; `X` = x nur für Ordner (und bereits ausführbare Dateien) | `chmod -R g+rX shared/`    |
+
+Numerische schreibweise:
+
+| Zahl | Bedeutung     | Beispiel |
+| ---: | ------------- | -------- |
+|  `7` | `rwx` (4+2+1) | —        |
+|  `6` | `rw-` (4+2)   | —        |
+|  `5` | `r-x` (4+1)   | —        |
+|  `4` | `r--`         | —        |
+|  `0` | `---`         | —        |
+
+| Command               | Effekt      | Typisch für                |
+| --------------------- | ----------- | -------------------------- |
+| `chmod 644 FILE`      | `rw-r--r--` | normale Textdatei          |
+| `chmod 600 FILE`      | `rw-------` | private Secrets/Keys       |
+| `chmod 755 DIR`       | `rwxr-xr-x` | Ordner/öffentliche Scripts |
+| `chmod 700 DIR`       | `rwx------` | private Ordner             |
+| `chmod 755 script.sh` | `rwxr-xr-x` | ausführbares Script        |
+
+unmask:
+
+umask (user file-creation mode mask) bestimmt, welche Rechte beim Erstellen neuer Dateien und Ordner standardmäßig weggenommen werden.
+
+Wichtig: umask setzt nicht direkt “die Default-Rechte”, sondern ist eine Maske, die Bits abzieht.
+
+Grundprinzip
+
+- Neue Dateien starten typischerweise mit Basis 666 (rw-rw-rw-)
+  (ohne execute, weil Dateien nicht automatisch ausführbar sein sollen)
+
+- Neue Ordner starten typischerweise mit Basis 777 (rwxrwxrwx)
+
+Dann gilt:
+
+- effektive Rechte = Basisrechte AND (NOT umask)
+  (praktisch: “umask-Bits werden entfernt”)
+
+Beispiel
+
+Wenn umask = 022:
+
+- Datei: 666 - 022 → 644 = rw-r--r--
+
+- Ordner: 777 - 022 → 755 = rwxr-xr-x
+
+| Befehl      | Zweck                               | Beispiel / Output                  |
+| ----------- | ----------------------------------- | ---------------------------------- |
+| `umask`     | aktuelle Maske anzeigen (oft oktal) | `0022` oder `022`                  |
+| `umask -S`  | symbolisch anzeigen                 | `u=rwx,g=rx,o=rx` (je nach System) |
+| `umask 077` | Maske setzen (für aktuelle Shell)   | sorgt für private Defaults         |
+| `umask 027` | “group ok, others restriktiv”       | oft in Teams/Servern               |
+
+
+| umask | Neue Datei | Neuer Ordner | Meaning                           |
+| ----: | ---------: | -----------: | --------------------------------- |
+| `022` |      `644` |        `755` | others nur lesen/ausführen        |
+| `077` |      `600` |        `700` | nur du (sehr privat)              |
+| `002` |      `664` |        `775` | group darf schreiben (Team-Setup) |
+
+owner/ group ändern:
+
+| Command                  | Zweck                                          | Syntax                      | Beispiel                                | Effekt                                      |
+| ------------------------ | ---------------------------------------------- | --------------------------- | --------------------------------------- | ------------------------------------------- |
+| `chown`                  | Besitzer (Owner) ändern (optional auch Gruppe) | `chown OWNER FILE`          | `sudo chown root secret.txt`            | Owner wird `root`, Group bleibt wie sie ist |
+| `chown OWNER:GROUP FILE` | Owner **und** Group ändern                     | `chown OWNER:GROUP FILE`    | `sudo chown root:root secret.txt`       | Owner+Group werden `root:root`              |
+| `chown :GROUP FILE`      | nur Group ändern (Owner bleibt)                | `chown :GROUP FILE`         | `sudo chown :root secret.txt`           | nur Group wird `root`                       |
+| `chown -R ... DIR`       | rekursiv (VORSICHT)                            | `chown -R OWNER:GROUP DIR/` | `sudo chown -R $USER:$USER ~/lab/perms` | ändert alles darunter                       |
+
+nur group ändern:
+
+
+| Command            | Zweck                             | Syntax                | Beispiel                          | Effekt                          |
+| ------------------ | --------------------------------- | --------------------- | --------------------------------- | ------------------------------- |
+| `chgrp`            | Gruppe einer Datei/Ordners ändern | `chgrp GROUP FILE`    | `sudo chgrp root secret.txt`      | Group wird `root`, Owner bleibt |
+| `chgrp -R ... DIR` | rekursiv (VORSICHT)               | `chgrp -R GROUP DIR/` | `sudo chgrp -R devs ~/lab/shared` | ändert Group für alles darunter |
+
+
+User und Groubs Befehltabelle:
+
+| Befehl               | Was zeigt es?                          | Typischer Use-Case                            | Beispiel                            |
+| -------------------- | -------------------------------------- | --------------------------------------------- | ----------------------------------- |
+| `whoami`             | aktueller Username                     | “Als wer bin ich gerade?”                     | `whoami`                            |
+| `id`                 | UID/GID + Gruppen (Namen & IDs)        | Debug bei Permission-Problemen                | `id` · `id -u` · `id -g` · `id -Gn` |
+| `groups`             | Gruppennamen des Users                 | schnell checken ob z.B. `sudo`, `docker`      | `groups` · `groups lukas`           |
+| `getent passwd USER` | User-Eintrag aus NSS (lokal/LDAP etc.) | zuverlässiger als nur `/etc/passwd`           | `getent passwd $USER`               |
+| `getent group GROUP` | Gruppen-Eintrag aus NSS                | Gruppen-Member prüfen                         | `getent group sudo`                 |
+| `who`                | eingeloggte User (Sessions)            | Multiuser-Systeme/SSH                         | `who`                               |
+| `w`                  | wie `who` + was sie tun                | sehen wer gerade was ausführt                 | `w`                                 |
+| `users`              | nur Usernamen der eingeloggten User    | sehr kurz                                     | `users`                             |
+| `last`               | Login-Historie                         | “Wer war wann drauf?”                         | `last`                              |
+| `sudo -l`            | welche sudo-Rechte du hast             | warum klappt sudo / was darf ich              | `sudo -l`                           |
+| `passwd -S USER`     | Passwort-Status (gesperrt/aktiv)       | Account-Status prüfen (root nötig für andere) | `passwd -S $USER`                   |
+| `su - USER`          | User wechseln (Login-Shell)            | testen wie Rechte als anderer User sind       | `sudo su - root` (vorsichtig)       |
+
+User & Group Management:
+
+| Befehl               | Zweck                                               | Wichtigste Optionen/Notizen                                  | Beispiel                               |
+| -------------------- | --------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------- |
+| `adduser USER`       | User anlegen (komfortabel, erstellt Home, fragt PW) | Debian/Ubuntu “friendly wrapper”                             | `sudo adduser labuser`                 |
+| `useradd USER`       | User anlegen (low-level, wenig Defaults)            | oft brauchst du Flags wie `-m`                               | `sudo useradd -m -s /bin/bash labuser` |
+| `usermod`            | bestehenden User ändern                             | `-aG` Gruppen anhängen (sehr wichtig), `-s` Shell, `-d` Home | `sudo usermod -aG labgroup labuser`    |
+| `userdel USER`       | User löschen                                        | `-r` löscht Home + Mailspool                                 | `sudo userdel -r labuser`              |
+| `passwd USER`        | Passwort setzen/ändern                              | `-l` lock, `-u` unlock, `-S` Status                          | `sudo passwd labuser`                  |
+| `groupadd GROUP`     | Gruppe anlegen                                      | `-g` GID setzen (optional)                                   | `sudo groupadd labgroup`               |
+| `groupmod GROUP`     | Gruppe ändern                                       | `-n` rename, `-g` GID ändern                                 | `sudo groupmod -n newgroup labgroup`   |
+| `groupdel GROUP`     | Gruppe löschen                                      | geht nur, wenn sie nicht gebraucht wird                      | `sudo groupdel labgroup`               |
+| `gpasswd`            | Gruppen-Mitglieder verwalten                        | `-a` add user, `-d` del user, `-M` members setzen            | `sudo gpasswd -a labuser labgroup`     |
+| `newgrp GROUP`       | neue Shell mit anderer **Primary Group**            | praktisch zum Testen ohne Logout                             | `newgrp labgroup`                      |
+| `id USER`            | UID/GID + Gruppen anzeigen                          | `-Gn` nur Gruppennamen                                       | `id labuser`                           |
+| `groups USER`        | Gruppennamen anzeigen                               | schnell/kurz                                                 | `groups labuser`                       |
+| `getent passwd USER` | User-Eintrag aus NSS (lokal/LDAP)                   | robuster als direkt Files lesen                              | `getent passwd labuser`                |
+| `getent group GROUP` | Group-Eintrag aus NSS                               | zeigt GID + Members                                          | `getent group labgroup`                |
+| `deluser USER GROUP` | User aus Gruppe entfernen (Debian/Ubuntu)           | bequemer Wrapper                                             | `sudo deluser labuser labgroup`        |
+
+
+Which und type:
+
+| Befehl      | Was macht er?                                                         |                 Erkennt Aliases/Functions/Builtins? | Typische Ausgabe                             | Wann benutzen?                                               |
+| ----------- | --------------------------------------------------------------------- | --------------------------------------------------: | -------------------------------------------- | ------------------------------------------------------------ |
+| `which CMD` | sucht **im `$PATH`** nach dem ausführbaren Programm                   | meistens **nein** (fokussiert auf PATH-Executables) | `/usr/bin/ls`                                | “Welches Binary wird im PATH gefunden?”                      |
+| `type CMD`  | Shell-intern: zeigt, **was CMD ist** (Alias, Function, Builtin, File) |                                              **ja** | `ls is aliased to ...` / `ls is /usr/bin/ls` | Debugging: “Warum ruft `ls` etwas anderes auf als erwartet?” |
+
+| Befehl         | Zweck                                                    | Beispiel          |
+| -------------- | -------------------------------------------------------- | ----------------- |
+| `which -a CMD` | alle Treffer im PATH anzeigen                            | `which -a python` |
+| `type -a CMD`  | alle Stellen zeigen (Alias/Function + alle PATH-Treffer) | `type -a python`  |
+
+
+command Befehl:
+
+| Befehl                  | Zweck                                                      | Was kommt raus?               | Typischer Use-Case                            |
+| ----------------------- | ---------------------------------------------------------- | ----------------------------- | --------------------------------------------- |
+| `command -v CMD`        | zeigt, **was die Shell für CMD ausführen würde**           | Pfad oder Name (bei Builtins) | Debug bei “command not found”, PATH-Problemen |
+| `command -V CMD`        | ausführlich: **Art** von CMD (alias/function/builtin/file) | Textbeschreibung              | “Warum ist `ls` anders?” (alias vs binary)    |
+| `command CMD [args]`    | erzwingt Ausführung als **Command**, ignoriert Aliases     | Output des Commands           | wenn ein Alias stört: `command ls`            |
+| `command -- CMD [args]` | wie oben, aber beendet Options-Parsing                     | —                             | sicher, falls CMD mit `-` anfängt (selten)    |
+
+Durchsuchen von Prozessen:
+
+| Befehl               | Zweck                                               | Beispiel                    | Ergebnis                          |
+| -------------------- | --------------------------------------------------- | --------------------------- | --------------------------------- |
+| `pgrep NAME`         | PIDs von Prozessen, deren Name matcht               | `pgrep sshd`                | z.B. `123 456`                    |
+| `pgrep -a NAME`      | PID + komplette Commandline                         | `pgrep -a python`           | `123 python app.py`               |
+| `pgrep -l NAME`      | PID + Prozessname                                   | `pgrep -l sshd`             | `123 sshd`                        |
+| `pgrep -f PATTERN`   | matcht gegen **ganze Commandline** (nicht nur Name) | `pgrep -af 'uvicorn.*8000'` | findet z.B. uvicorn auf Port 8000 |
+| `pgrep -u USER NAME` | nur Prozesse eines Users                            | `pgrep -u $USER -a code`    | nur deine `code` Prozesse         |
+| `pgrep -n NAME`      | **neuester** (latest) match                         | `pgrep -n python`           | eine PID                          |
+| `pgrep -o NAME`      | **ältester** (oldest) match                         | `pgrep -o python`           | eine PID                          |
+| `pgrep -c NAME`      | nur **Anzahl** Treffer                              | `pgrep -c sshd`             | z.B. `1`                          |
+| `pgrep -x NAME`      | exakter Name (kein Teilmatch)                       | `pgrep -x bash`             | nur “bash”                        |
+| `pgrep -i NAME`      | case-insensitive                                    | `pgrep -i NGINX`            | findet `nginx`                    |
 
