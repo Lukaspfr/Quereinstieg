@@ -1,0 +1,3 @@
+# lab noise
+lab/**/*.log
+lab/**/tmp/
