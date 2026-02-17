@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "user: $(whoami)"
+echo "host: $(hostname)"
+echo "time: $(date)"
+echo "cwd:  $(pwd)"
+echo "ip:"
+ip -br a 2>/dev/null || true
+echo "listening ports:"
+ss -tuln 2>/dev/null | head -n 20 || true
