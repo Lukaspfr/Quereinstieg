@@ -394,3 +394,23 @@ Durchsuchen von Prozessen:
 | `pgrep -x NAME`      | exakter Name (kein Teilmatch)                       | `pgrep -x bash`             | nur “bash”                        |
 | `pgrep -i NAME`      | case-insensitive                                    | `pgrep -i NGINX`            | findet `nginx`                    |
 
+
+
+awk Befehl (awk liest die Datei zeilenweise mit einer Standarttrennung: Leerzeichen + tabs):
+
+| Muster                                                             | Zweck                     | Beispiel                                                | Ergebnis/Notiz                             |
+| ------------------------------------------------------------------ | ------------------------- | ------------------------------------------------------- | ------------------------------------------ |
+| `awk '{print $1}' file`                                            | 1. Feld ausgeben          | `awk '{print $1}' app.log`                              | Standard: Felder durch Whitespace getrennt |
+| `awk '{print $3}' file`                                            | 3. Feld ausgeben          | `awk '{print $3}' app.log`                              | wie in deinem Beispiel                     |
+| `awk '{print $1, $3}' file`                                        | mehrere Felder            | `awk '{print $1, $3}' app.log`                          | trennt standardmäßig mit Leerzeichen       |
+| `awk -F',' '{print $3}' file.csv`                                  | Feldtrenner setzen        | `awk -F',' '{print $3}' data.csv`                       | für CSV, `-F` = separator                  |
+| `awk -F'[: ]+' '{print $2}'`                                       | Regex als Trenner         | `awk -F'[: ]+' '{print $2}' file`                       | trennt an `:` **oder** Spaces              |
+| `awk 'NR==1{print; exit}' file`                                    | erste Zeile               | `awk 'NR==1{print; exit}' app.log`                      | `NR` = Zeilennummer                        |
+| `awk 'NR<=5{print}' file`                                          | erste 5 Zeilen            | `awk 'NR<=5' app.log`                                   | `print` ist default                        |
+| `awk '/ERROR/ {print $0}' file`                                    | Zeilen matchen (wie grep) | `awk '/ERROR/' app.log`                                 | `$0` = ganze Zeile                         |
+| `awk '$2=="ERROR"{print}' file`                                    | nach Feld filtern         | `awk '$2=="ERROR"' app.log`                             | z.B. Log-Level in Spalte 2                 |
+| `awk '{count[$3]++} END{for (k in count) print count[k], k}' file` | zählen (Histogramm)       | `awk '{c[$3]++} END{for(k in c) print c[k],k}' app.log` | oft mit `sort -nr` kombiniert              |
+| `awk '{sum+=$5} END{print sum}' file`                              | Summe über Feld           | `awk '{sum+=$5} END{print sum}' data.txt`               | Feld muss numerisch sein                   |
+| `awk '{print NR ":" $0}' file`                                     | Zeilennummern anzeigen    | `awk '{print NR ":" $0}' app.log`                       | ähnlich `grep -n`                          |
+| `awk 'BEGIN{OFS="\t"} {print $1,$2}' file`                         | Output separator setzen   | `awk 'BEGIN{OFS="\t"} {print $1,$2}' file`              | `OFS` = Output Field Separator             |
+

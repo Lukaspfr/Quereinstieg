@@ -1,0 +1,5 @@
+#!/bin/bash
+echo Gib eine Zahl ein:
+read Zahl
+x=$(($Zahl + 2))
+echo "$Zahl + 2 = $x"

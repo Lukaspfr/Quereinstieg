@@ -1,0 +1,6 @@
+#!/bin/bash
+x=12.5
+y=13
+z=$(python3 -c "print($x + $y)")
+echo $z
+
