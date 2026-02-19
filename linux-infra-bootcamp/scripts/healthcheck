@@ -21,7 +21,7 @@ log=""
 lines="50"
 service=""
 code=0
-rc=0
+
 DEBUG=0
 
 proc_rc=0
@@ -33,13 +33,11 @@ main(){
 
 	arg_parsing "$@"
 	
-	process_check; proc_rc=$? || true
-	
-	port_check;    port_rc=$? || true
-	
-	log_show;      log_rc=$?  || true
-	
-	log_scan;      scan_rc=$? || true
+	process_check || proc_rc=$?
+	port_check    || port_rc=$?
+	log_show      || log_rc=$?
+	log_scan      || scan_rc=$?
+
       	
 	summary
 }
