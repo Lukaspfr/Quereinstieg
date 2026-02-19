@@ -1,0 +1,344 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+#How to use
+
+usage() {
+	echo "Benutzung: $0 [-n <prozessname>] [-p <port>] [-l <logfile>] [-c <lines>] [-s <service>] [-h (help)] [-d (debug)]"
+	echo "Beispiele:"
+	echo "  $0 -n python3"
+	echo "  $0 -p 8000"
+	echo "  $0 -l /tmp/x.log -c 20"
+}
+
+
+# Initialise vars because of set -u
+
+proc_name=""
+port=""
+log=""
+lines="50"
+service=""
+code=0
+rc=0
+DEBUG=0
+
+proc_rc=0
+port_rc=0
+log_rc=0
+scan_rc=0
+
+main(){
+
+	arg_parsing "$@"
+	
+	process_check; proc_rc=$? || true
+	
+	port_check;    port_rc=$? || true
+	
+	log_show;      log_rc=$?  || true
+	
+	log_scan;      scan_rc=$? || true
+      	
+	summary
+}
+
+arg_parsing(){
+
+	OPTIND=1
+
+	#Getops sets the record straight!
+
+	while getopts ":n:p:l:c:s:hd" opt; do
+		case "$opt" in
+			n)proc_name="$OPTARG";;
+			p)port="$OPTARG";;
+			l)log="$OPTARG";;
+			c)lines="$OPTARG";;
+			s)service="$OPTARG";;
+			h)usage; exit 0 ;;
+			d)DEBUG=1;;
+			\?) echo "Unbekannte Option: -$OPTARG"; usage; exit 2 ;;
+    			:)  echo "Option -$OPTARG braucht einen Wert."; usage; exit 2 ;;
+		esac
+	done
+
+	shift $((OPTIND - 1))
+
+	#No more parsing arguments
+
+	if [[ $# -gt 0 ]]; then
+		echo "[CRIT] Unerwartete Argumente: $*"
+		usage
+		exit 2
+	fi
+
+
+	# Count the set fields
+	local count=0
+	[[ -n "$proc_name"  ]] && ((count += 1))
+	[[ -n "$port"  ]] && ((count += 1))
+	[[ -n "$log"   ]] && ((count += 1))
+	 [[ -n "$service"   ]] && ((count += 1))
+
+	# Rules:
+	# - not 0
+ 
+	if (( count == 0 )); then
+		echo "[CRIT] Mindestens eine Option von -n, -p, -l oder -s muss gesetzt sein."
+		usage
+		exit 2
+	fi
+	#Validations
+
+	if [[ -n "$port" ]] && ! [[ "$port" =~ ^[0-9]+$ ]] ; then
+
+		echo "[CRIT] Port muss eine Zahl sein."
+		exit 2
+	
+	fi
+	if [[ -n "$port" ]] && (( port < 1 || port > 65535 )); then
+
+		echo "[CRIT] Port muss zwischen 1 und 65535 liegen."
+		exit 2
+
+	fi
+
+	if ! [[ "$lines" =~ ^[0-9]+$ ]] || (( lines < 1 )); then
+
+		echo "[CRIT] lines (-c) muss eine positive Zahl sein."
+		exit 2
+
+	fi
+
+	#[[ "$DEBUG" == "1" ]] && echo "[INFO] n=$proc_name p=$port l=$log s=$service c=$lines" ---> schlechte version --> se wirft exit 1
+
+	if [[ "$DEBUG" == "1" ]]; then
+  		
+		echo "[INFO] n=$proc_name p=$port l=$log s=$service c=$lines"
+	
+	fi
+
+
+}
+
+
+process_check() {
+
+	
+	if [[ -n "$proc_name" ]]; then
+
+        	if pgrep -a -- "$proc_name" >/dev/null; then
+
+                	echo "[OK] Prozesse $proc_name gefunden"
+                	pgrep -a -- "$proc_name"
+                	return 0
+
+        	else
+
+                	echo "[CRIT] Kein Prozess gefunden: $proc_name"
+        	        return 2
+
+	        fi
+
+	else
+
+		echo "[SKIP] Prozess Check geskippt."
+        	return 0
+
+	fi	
+
+
+
+
+}
+
+port_check(){
+
+
+	if [[ -z "$port" ]]; then
+
+		echo "[SKIP] Port Check geskippt."
+       		return 0
+
+	fi
+	
+	local out=""
+
+	if out=$(ss -ltnp 2>/dev/null | grep -E -- ":$port([^0-9]|$)"); then
+
+        	echo "[OK] Port $port listening"
+        	echo "$out"
+        	return 0
+
+	else
+
+        	echo "[CRIT] Kein LISTEN Socket an Port: $port"
+        	return 2
+
+	fi
+
+}
+
+log_show(){
+
+	# Sind genug Argumente da?
+	
+	local count_log=0
+
+	[[ -n "$service" ]] && ((count_log += 1))
+	[[ -n "$log" ]] && ((count_log += 1))
+	
+	
+	if ((count_log == 0)); then
+
+		echo "[SKIP] Log show geskippt (kein -s oder -l angegeben)"
+        	return 0
+	
+	fi
+	
+	#Überprüfen ob es eine Zahl ---> because humans are dumb
+
+	[[ "$lines" =~ ^[0-9]+$ ]] || { echo "[CRIT] -c muss eine Zahl sein"; return 2; }
+	(( lines >= 1 )) || { echo "[CRIT] -c muss >= 1 sein"; return 2; }
+	
+	#Here comes the magic
+
+	if [[ -n "$log" ]] && tail -n 1 -- "$log" >/dev/null 2>&1; then
+
+        	tail -n "$lines" -- "$log"
+        	return 0
+
+
+	elif [[ -n "$service" ]] && command -v journalctl >/dev/null 2>&1 && journalctl -u "$service" -n 1 --no-pager >/dev/null 2>&1; then
+
+        	journalctl -u "$service" -n "$lines" --no-pager
+        	return 0
+
+	fi
+
+	# fallback
+
+	if [[ -f /var/log/syslog ]]; then
+
+        	tail -n "$lines" -- /var/log/syslog
+        	return 0
+
+	elif [[ -f /var/log/messages ]]; then
+
+        	tail -n "$lines" -- /var/log/messages
+        	return 0
+	
+	else
+
+        	echo "[WARN] Kein logfile, kein journalctl-output und kein /var/log/syslog|messages gefunden."
+        	echo "Tipp: Starte den Dienst im Foreground (z.B. direkt im Terminal) oder schreibe Logs in eine Datei."
+        	return 1
+	
+	fi
+
+}
+
+log_scan(){
+
+	
+		
+
+	# Sind genug Argumente da?
+	
+	local count_log2=0
+
+	[[ -n "$log" ]] && ((count_log2 += 1))
+
+	if ((count_log2 == 0)); then
+
+        	return 0
+	fi
+
+	#Logfile prüfen
+
+	if [[ ! -f "$log" ]]; then
+
+                echo "[CRIT] Logfile existiert nicht: $log"
+                return 2
+
+        fi
+
+
+	#Lines prüfen
+
+	[[ "$lines" =~ ^[0-9]+$ ]] || { echo "[CRIT] -c muss eine Zahl sein"; return 2; }
+	
+	(( lines >= 1 )) || { echo "[CRIT] -c muss >= 1 sein"; return 2; }
+
+	#output speichern (leichter lesbar)
+	
+	local out=""
+
+	out="$(tail -n "$lines" -- "$log" | grep -Ei "error|fail|panic|traceback" || true)"
+
+	if [[ -n "$out" ]]; then
+
+        	echo "[WARN] Errorartige Logs gefunden."
+        	echo "$out"
+        	return 1
+
+	else
+
+        	echo "[OK] Keine errorartigen Logs in den letzten Zeilen"
+        	return 0
+
+	fi
+
+
+
+}
+
+summary(){
+	
+	if [[ "$DEBUG" == "1" ]]; then
+  	
+		 echo "[INFO] rc: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+	fi
+	
+	
+
+	#Code resetten ( für spätere Experimente )
+
+	code=0
+
+	for check_rc in "$proc_rc" "$port_rc" "$log_rc" "$scan_rc"; do
+    	
+		if (( check_rc == 2 )); then
+    	
+			code=2
+			break
+    	
+		elif (( check_rc == 1 )); then
+    	
+			code=1
+    	
+		fi
+	
+	done
+
+	if (( code == 2 )); then
+
+        	echo "[CRIT] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+
+	elif (( code == 1 )); then
+
+	        echo "[WARN] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+
+	else
+
+	        echo "[OK] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+
+	fi
+
+	exit "$code"
+
+}
+
+main "$@"
