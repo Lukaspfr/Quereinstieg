@@ -6,9 +6,9 @@ Ich arbeite mit **Ubuntu in WSL** und baue ein solides Fundament in Linux, Debug
 
 
 ## Ziele
-- In 2–3 Wochen bewerbungs- und interviewfähig werden (Junior Linux/System/Infra)
-- Linux-Fundament: Filesystem, Permissions, Users/Groups, PATH, Debugging
-- Kleine Tools bauen & sauber dokumentieren (GitHub-tauglich)
+- `In 2–3 Wochen bewerbungs- und interviewfähig werden (Junior Linux/System/Infra)`
+- `Linux-Fundament: Filesystem, Permissions, Users/Groups, PATH, Debugging`
+- `Kleine Tools bauen & sauber dokumentieren (GitHub-tauglich)`
 
 
 ## Repo-Struktur (Auszug)
@@ -36,13 +36,13 @@ Quereinstieg/
 
 linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional prüft:
 
-- Prozess (via pgrep)
+- `Prozess (via pgrep)`
 
-- Port (via ss)
+- `Port` (via ss)`
 
-- Logs (via -l <logfile> oder optional journalctl wenn verfügbar)
+- `Logs` (via -l <logfile> oder optional journalctl wenn verfügbar)`
 
-- Logscan auf error-like Patterns (error|fail|panic|traceback)
+- `Logscan` auf error-like Patterns (error|fail|panic|traceback)`
 
 
 ## Usage
@@ -69,11 +69,11 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 
 ## Exit Codes
 ```
-0 OK
+- `0` OK
 
-1 WARN (z.B. error-like Patterns in Logs, oder keine Logs im Fallback verfügbar)
+- `1` WARN (z.B. error-like Patterns in Logs, oder keine Logs im Fallback verfügbar)
 
-2 CRIT (z.B. Port/Prozess nicht vorhanden, oder angegebenes Logfile existiert nicht)
+- `2` CRIT (z.B. Port/Prozess nicht vorhanden, oder angegebenes Logfile existiert nicht)
 ```
 
 ## WSL Hinweis (systemd/journalctl)
@@ -85,10 +85,10 @@ Das Tool ist daher Fallback-first: Logs können über -l <logfile> oder (falls v
 ## How to run (optional: als Command)
 
 Wenn ~/bin im PATH ist, kannst du einen Symlink setzen:
-```
-ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"
-healthcheck -h
-```
+
+`ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"`
+`healthcheck -h`
+
 
 ## Lernen / Dokumentation
 
