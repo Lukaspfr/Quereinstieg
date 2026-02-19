@@ -27,10 +27,9 @@ Quereinstieg/
    └─ scripts/
       ├─ healthcheck        # Highlight: WSL-tauglicher Healthcheck
       └─ parts/             # Teilskripte, aus denen healthcheck zusammengebaut wurde
-
 ```
 
-Hinweis: Der Ordner lab/ enthält bewusst Übungsdateien (auch “dummy logs”), um Befehle realistisch zu testen.
+> Hinweis: Der Ordner lab/ enthält bewusst Übungsdateien (auch “dummy logs”), um Befehle realistisch zu testen.
 
 
 ## Highlight: healthcheck (WSL-tauglich)
@@ -48,34 +47,34 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 
 ## Usage
 
-./linux-infra-bootcamp/scripts/healthcheck [-n <prozessname>] [-p <port>] [-l <logfile>] [-s <service>] [-c <lines>] [-d (help)] [-h (help)]
+`./linux-infra-bootcamp/scripts/healthcheck [-n <prozessname>] [-p <port>] [-l <logfile>] [-s <service>] [-c <lines>] [-d (debug)] [-h (help)]`
 
 ## Beispiele
 
 ### Port check
-./linux-infra-bootcamp/scripts/healthcheck -p 8080
+`./linux-infra-bootcamp/scripts/healthcheck -p 8080`
 
 ### Prozess check
-./linux-infra-bootcamp/scripts/healthcheck -n bash
+`./linux-infra-bootcamp/scripts/healthcheck -n bash`
 
 ### Logs aus Datei + Scan
-./linux-infra-bootcamp/scripts/healthcheck -l /tmp/app.log -c 50
+`./linux-infra-bootcamp/scripts/healthcheck -l /tmp/app.log -c 50`
 
 ### Service-Logs (nur falls journalctl in WSL verfügbar ist)
-./linux-infra-bootcamp/scripts/healthcheck -s nginx -c 50
+`./linux-infra-bootcamp/scripts/healthcheck -s nginx -c 50`
 
 ### Debug output
-./linux-infra-bootcamp/scripts/healthcheck -d -p 8080
+`./linux-infra-bootcamp/scripts/healthcheck -d -p 8080`
 
 
 ## Exit Codes
-
+```
 0 OK
 
 1 WARN (z.B. error-like Patterns in Logs, oder keine Logs im Fallback verfügbar)
 
 2 CRIT (z.B. Port/Prozess nicht vorhanden, oder angegebenes Logfile existiert nicht)
-
+```
 
 ## WSL Hinweis (systemd/journalctl)
 
@@ -86,10 +85,10 @@ Das Tool ist daher Fallback-first: Logs können über -l <logfile> oder (falls v
 ## How to run (optional: als Command)
 
 Wenn ~/bin im PATH ist, kannst du einen Symlink setzen:
-
+```
 ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"
 healthcheck -h
-
+```
 
 ## Lernen / Dokumentation
 
