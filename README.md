@@ -36,13 +36,13 @@ Quereinstieg/
 
 linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional prüft:
 
-- `Prozess (via pgrep)`
+- Prozess (via `pgrep`)
 
-- `Port` (via ss)`
+- Port (via `ss`)
 
-- `Logs` (via -l <logfile> oder optional journalctl wenn verfügbar)`
+- Logs (via `-l <logfile>` oder optional `journalctl` wenn verfügbar)
 
-- `Logscan` auf error-like Patterns (error|fail|panic|traceback)`
+- Logscan auf error-like Patterns (error|fail|panic|traceback)
 
 
 ## Usage
@@ -68,23 +68,23 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 
 
 ## Exit Codes
-```
+
 - `0` OK
 
 - `1` WARN (z.B. error-like Patterns in Logs, oder keine Logs im Fallback verfügbar)
 
 - `2` CRIT (z.B. Port/Prozess nicht vorhanden, oder angegebenes Logfile existiert nicht)
-```
+
 
 ## WSL Hinweis (systemd/journalctl)
 
-Je nach WSL-Setup sind systemd/systemctl/journalctl nicht immer verfügbar.
-Das Tool ist daher Fallback-first: Logs können über -l <logfile> oder (falls vorhanden) /var/log/syslog bzw. /var/log/messages gelesen werden.
+Je nach WSL-Setup sind `systemd/systemctl/journalctl` nicht immer verfügbar.
+Das Tool ist daher Fallback-first: Logs können über `-l <logfile>` oder (falls vorhanden) `/var/log/syslog` bzw. `/var/log/messages` gelesen werden.
 
 
 ## How to run (optional: als Command)
 
-Wenn ~/bin im PATH ist, kannst du einen Symlink setzen:
+Wenn `~/bin` im PATH ist, kannst du einen Symlink setzen:
 
 `ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"`
 `healthcheck -h`
