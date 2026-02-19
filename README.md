@@ -28,11 +28,12 @@ Quereinstieg/
       ├─ healthcheck        # Highlight: WSL-tauglicher Healthcheck
       └─ parts/             # Teilskripte, aus denen healthcheck zusammengebaut wurde
 
+```
 
 Hinweis: Der Ordner lab/ enthält bewusst Übungsdateien (auch “dummy logs”), um Befehle realistisch zu testen.
 
 
-Highlight: healthcheck (WSL-tauglich)
+## Highlight: healthcheck (WSL-tauglich)
 
 linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional prüft:
 
@@ -45,11 +46,11 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 - Logscan auf error-like Patterns (error|fail|panic|traceback)
 
 
-Usage
+## Usage
 
 ./linux-infra-bootcamp/scripts/healthcheck [-n <prozessname>] [-p <port>] [-l <logfile>] [-s <service>] [-c <lines>] [-d (help)] [-h (help)]
 
-Beispiele
+## Beispiele
 
 # Port check
 ./linux-infra-bootcamp/scripts/healthcheck -p 8080
@@ -67,7 +68,7 @@ Beispiele
 ./linux-infra-bootcamp/scripts/healthcheck -d -p 8080
 
 
-Exit Codes
+## Exit Codes
 
 0 OK
 
@@ -76,13 +77,13 @@ Exit Codes
 2 CRIT (z.B. Port/Prozess nicht vorhanden, oder angegebenes Logfile existiert nicht)
 
 
-WSL Hinweis (systemd/journalctl)
+## WSL Hinweis (systemd/journalctl)
 
 Je nach WSL-Setup sind systemd/systemctl/journalctl nicht immer verfügbar.
 Das Tool ist daher Fallback-first: Logs können über -l <logfile> oder (falls vorhanden) /var/log/syslog bzw. /var/log/messages gelesen werden.
 
 
-How to run (optional: als Command)
+## How to run (optional: als Command)
 
 Wenn ~/bin im PATH ist, kannst du einen Symlink setzen:
 
@@ -90,7 +91,7 @@ ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"
 healthcheck -h
 
 
-Lernen / Dokumentation
+## Lernen / Dokumentation
 
 Die Tagesdokumentation inkl. Quiz & Interviewdrills liegt unter:
 
