@@ -42,7 +42,7 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 
 - Logs (via `-l <logfile>` oder optional `journalctl` wenn verfügbar)
 
-- Logscan auf error-like Patterns (error|fail|panic|traceback)
+- Logscan auf error-like Patterns `(error|fail|panic|traceback)`
 
 
 ## Usage
@@ -86,9 +86,10 @@ Das Tool ist daher Fallback-first: Logs können über `-l <logfile>` oder (falls
 
 Wenn `~/bin` im PATH ist, kannst du einen Symlink setzen:
 
-`ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"`
-`healthcheck -h`
-
+```bash
+ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"
+healthcheck -h
+```
 
 ## Lernen / Dokumentation
 
