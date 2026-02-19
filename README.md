@@ -6,9 +6,9 @@ Ich arbeite mit **Ubuntu in WSL** und baue ein solides Fundament in Linux, Debug
 
 
 ## Ziele
-- `In 2–3 Wochen bewerbungs- und interviewfähig werden (Junior Linux/System/Infra)`
-- `Linux-Fundament: Filesystem, Permissions, Users/Groups, PATH, Debugging`
-- `Kleine Tools bauen & sauber dokumentieren (GitHub-tauglich)`
+- In 2–3 Wochen bewerbungs- und interviewfähig werden (Junior Linux/System/Infra)
+- Linux-Fundament: Filesystem, Permissions, Users/Groups, PATH, Debugging
+- Kleine Tools bauen & sauber dokumentieren (GitHub-tauglich)
 
 
 ## Repo-Struktur (Auszug)
