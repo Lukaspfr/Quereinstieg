@@ -52,19 +52,19 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 
 ## Beispiele
 
-# Port check
+### Port check
 ./linux-infra-bootcamp/scripts/healthcheck -p 8080
 
-# Prozess check
+### Prozess check
 ./linux-infra-bootcamp/scripts/healthcheck -n bash
 
-# Logs aus Datei + Scan
+### Logs aus Datei + Scan
 ./linux-infra-bootcamp/scripts/healthcheck -l /tmp/app.log -c 50
 
-# Service-Logs (nur falls journalctl in WSL verfügbar ist)
+### Service-Logs (nur falls journalctl in WSL verfügbar ist)
 ./linux-infra-bootcamp/scripts/healthcheck -s nginx -c 50
 
-# Debug output
+### Debug output
 ./linux-infra-bootcamp/scripts/healthcheck -d -p 8080
 
 
