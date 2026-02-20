@@ -1,14 +1,24 @@
-Unterschied grep vs grep -E?
+### Unterschied `grep` vs `grep -E`
 
-grep sucht wie findstr nach einem bestimmten Wort, grep -E erlaubt erweiterte Eingaben wie regex in der suche.
+- `grep` nutzt Basic Regex (BRE).
+- `grep -E` nutzt Extended Regex (ERE), z.B. `|`, `+`, `?` ohne/mit weniger Escapes.
 
-Wofür ist sort | uniq -c klassisch?
+Beispiel:
 
-Due Abfolge ist um Outputs zu ordnen und dublikate zu entfernen. Dies muss man geordnet tun, da uniq -c keine dublikate entfernt die nicht nebeneinander sind.
+`grep -E "error|fail|panic" logfile`
 
-Was macht awk '{print $3}'?
+### Wofür `sort | uniq -c` klassisch ist
 
+- Zum Zählen von Häufigkeiten: erst `sort`, dann zählt `uniq -c`.
+- Wichtig: `uniq` wirkt nur auf benachbarte gleiche Zeilen.
 
-awk iteriert durch eine Datei oder text oder eingabe. Die Trennzeichen sind Standartmässig Leerzeichen oder Taps. Der Befehl bedeutet: Gib das dritte Feld jeder zeile aus in die Konsole.
+### Was macht `awk '{print $3}'`
+
+- Gibt das 3. Feld jeder Zeile aus.
+- Standard-Feldtrenner ist Whitespace (Leerzeichen/Tabs).
+
+Beispiel:
+
+`echo "a b c" | awk '{print $3}'`
 
 

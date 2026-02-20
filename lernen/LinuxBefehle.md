@@ -413,4 +413,58 @@ awk Befehl (awk liest die Datei zeilenweise mit einer Standarttrennung: Leerzeic
 | `awk '{sum+=$5} END{print sum}' file`                              | Summe über Feld           | `awk '{sum+=$5} END{print sum}' data.txt`               | Feld muss numerisch sein                   |
 | `awk '{print NR ":" $0}' file`                                     | Zeilennummern anzeigen    | `awk '{print NR ":" $0}' app.log`                       | ähnlich `grep -n`                          |
 | `awk 'BEGIN{OFS="\t"} {print $1,$2}' file`                         | Output separator setzen   | `awk 'BEGIN{OFS="\t"} {print $1,$2}' file`              | `OFS` = Output Field Separator             |
+curl:
 
+
+| Befehl | Option | Bedeutung | Beispiel |
+|---|---|---|---|
+| `curl` | `-X <METHOD>` | HTTP-Methode festlegen (GET/POST/PUT/DELETE…). Meist unnötig bei GET/POST, aber wichtig für z.B. PUT/DELETE. | `curl -X DELETE https://api.example.com/items/1` |
+| `curl` | `-I` | Nur Response-Header abrufen (HEAD-Request bzw. Header-only). | `curl -I https://example.com` |
+| `curl` | `-i` | Response-Header **mit** Body ausgeben. | `curl -i https://example.com` |
+| `curl` | `-v` | Verbose: detaillierte Debug-Ausgabe (Request/Handshake/Redirects). | `curl -v https://example.com` |
+| `curl` | `--trace <file>` | Sehr detailliertes Trace in Datei (Debug). | `curl --trace trace.txt https://example.com` |
+| `curl` | `--trace-ascii <file>` | Trace als lesbarer ASCII-Output. | `curl --trace-ascii trace.txt https://example.com` |
+| `curl` | `-s` | Silent: keine Progress-Bar/Fehlertexte (Fehlercodes bleiben!). | `curl -s https://example.com` |
+| `curl` | `-S` | Mit `-s`: trotzdem Fehler ausgeben. | `curl -sS https://example.com` |
+| `curl` | `-f` | Fail on HTTP errors: bei 4xx/5xx Exit-Code ≠ 0 und kein HTML-Error-Body. | `curl -f https://example.com/notfound` |
+| `curl` | `-L` | Redirects folgen (Location:). | `curl -L http://example.com` |
+| `curl` | `--max-redirs <N>` | Max. Redirect-Anzahl begrenzen. | `curl -L --max-redirs 5 http://example.com` |
+| `curl` | `-m, --max-time <sec>` | Gesamtes Timeout (Sekunden). | `curl -m 3 https://example.com` |
+| `curl` | `--connect-timeout <sec>` | Timeout nur fürs Verbindungsaufbauen. | `curl --connect-timeout 2 https://example.com` |
+| `curl` | `--retry <N>` | Bei transienten Fehlern retry. | `curl --retry 3 https://example.com` |
+| `curl` | `--retry-delay <sec>` | Pause zwischen Retries. | `curl --retry 5 --retry-delay 1 https://example.com` |
+| `curl` | `--retry-all-errors` | Retries auch bei mehr Fehlerarten (vorsichtig). | `curl --retry 3 --retry-all-errors https://example.com` |
+| `curl` | `-o <file>` | Output in Datei schreiben (statt stdout). | `curl -o page.html https://example.com` |
+| `curl` | `-O` | Datei unter Remote-Name speichern (aus URL). | `curl -O https://example.com/file.zip` |
+| `curl` | `-J` | Mit `-O`: Content-Disposition Filename verwenden. | `curl -OJ https://example.com/download` |
+| `curl` | `-C -` | Download fortsetzen (Resume). | `curl -C - -O https://example.com/big.iso` |
+| `curl` | `--compressed` | Komprimierte Responses akzeptieren (gzip/br) und automatisch dekomprimieren. | `curl --compressed https://example.com` |
+| `curl` | `-H "K: V"` | Header setzen (beliebig viele). | `curl -H "Accept: application/json" https://api.example.com` |
+| `curl` | `-A "<ua>"` | User-Agent setzen. | `curl -A "MyTool/1.0" https://example.com` |
+| `curl` | `-e, --referer <url>` | Referer-Header setzen. | `curl -e https://google.com https://example.com` |
+| `curl` | `-u user:pass` | Basic Auth (Achtung: History/Logs). | `curl -u alice:secret https://api.example.com` |
+| `curl` | `-H "Authorization: Bearer <t>"` | Token/Bearer Auth via Header. | `curl -H "Authorization: Bearer $TOKEN" https://api.example.com/me` |
+| `curl` | `-d "<data>"` | POST-Body senden (setzt oft POST). Form-URL-encoded. | `curl -d "a=1&b=2" https://example.com/form` |
+| `curl` | `--data-raw "<data>"` | Wie `-d`, aber ohne Spezialbehandlung von `@`. | `curl --data-raw '{"x":1}' https://api.example.com` |
+| `curl` | `--data-urlencode "<k=v>"` | URL-encoding korrekt durchführen. | `curl --data-urlencode "q=hello world" https://example.com/search` |
+| `curl` | `-F "<k=v>"` | Multipart/Form-Data (Datei-Upload etc.). | `curl -F "file=@img.png" https://example.com/upload` |
+| `curl` | `-G` | `-d` Daten als Query-String an URL hängen (GET mit Params). | `curl -G -d "q=test" https://example.com/search` |
+| `curl` | `--json '<json>'` | JSON senden (setzt Header + POST). | `curl --json '{"a":1}' https://api.example.com/items` |
+| `curl` | `-T <file>` | Datei “hochladen” (PUT/Transfer). | `curl -T file.txt https://example.com/put-here` |
+| `curl` | `-b <cookie>` | Cookies mitsenden (String oder Datei). | `curl -b "sid=abc" https://example.com` |
+| `curl` | `-c <file>` | Cookies aus Response in Datei speichern. | `curl -c cookies.txt https://example.com` |
+| `curl` | `--cookie-jar <file>` | Cookie-Jar schreiben (ähnlich `-c`). | `curl --cookie-jar cookies.txt https://example.com` |
+| `curl` | `-k, --insecure` | TLS-Zertifikat nicht prüfen (nur Debug!). | `curl -k https://self-signed.local` |
+| `curl` | `--cacert <file>` | Eigene CA-Datei zum Verifizieren. | `curl --cacert ca.pem https://internal.local` |
+| `curl` | `--cert <file>` | Client-Zertifikat (mTLS). | `curl --cert client.pem https://mtls.local` |
+| `curl` | `--key <file>` | Private Key fürs Client-Zertifikat. | `curl --cert client.pem --key client.key https://mtls.local` |
+| `curl` | `--tlsv1.2` | TLS-Version erzwingen (Beispiel). | `curl --tlsv1.2 https://example.com` |
+| `curl` | `--http1.1` | HTTP/1.1 erzwingen. | `curl --http1.1 https://example.com` |
+| `curl` | `--http2` | HTTP/2 aktivieren/erzwingen (wenn unterstützt). | `curl --http2 https://example.com` |
+| `curl` | `--resolve host:port:ip` | DNS override pro Request (test/staging). | `curl --resolve example.com:443:1.2.3.4 https://example.com` |
+| `curl` | `--dns-servers <ip[,ip]>` | Eigene DNS-Server nutzen (wenn build das kann). | `curl --dns-servers 1.1.1.1 https://example.com` |
+| `curl` | `-w "<fmt>"` | “write-out”: Metriken am Ende ausgeben (time, code…). | `curl -w "code=%{http_code} time=%{time_total}\n" -o /dev/null -s https://example.com` |
+| `curl` | `--fail-with-body` | Wie `-f`, aber Body bei Fehlern behalten (neuere curl). | `curl --fail-with-body https://example.com/notfound` |
+| `curl` | `--head` | Alias für `-I`. | `curl --head https://example.com` |
+| `curl` | `--help` | Kurzhilfe. | `curl --help` |
+| `curl` | `--version` | Version + Features (z.B. http2, ssl). | `curl --version` |

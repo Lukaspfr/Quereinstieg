@@ -5,9 +5,13 @@ Das ~ ist das Homeverzeichnis. In dem Verzeichnis liegt das Userprofil des momen
 
 Warum ist find besser als grep?
 
-Man hat mehr Möglichkeiten, grep ist ein simpler "findstr" während find kann es genauer spezifizieren was man sucht.
-Zum beispiel: mit -iname 'Wasichsuche' kann ich nach etwas im namen suchen aber case insensitive, ich kann eine maxdepth eingeben und somit eine Ordnerstruktur nur bis zu einer 
-gewissen Tiefe durchsuchen usw. Es hat einfach mehr Möglichkeiten.
+find ist besser als grep” ist eigentlich ein Kategorienfehler:
+
+- find = findet Dateien/Verzeichnisse im Filesystem
+
+- grep = findet Textmuster in Dateien/Streams
+
+Beides ergänzt sich. Deine Beispiele mit -iname/-maxdepth passen aber, nur die Einordnung würde ich so korrigieren.
 
 Woran erkennst du Hardlink vs Symlink?
 

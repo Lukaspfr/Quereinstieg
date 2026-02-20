@@ -17,7 +17,8 @@ elif [[ "$LOG_WARN" == "true" ]]; then
 	code=1
 fi
 
-# Optional: Summary (hilft später im finalen healthcheck)
+# Für Final
+
 if (( code == 2 )); then
 
 	echo "[CRIT] summary: proc=$PROC_OK port=$PORT_OK logs_warn=$LOG_WARN"

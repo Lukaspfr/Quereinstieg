@@ -1,21 +1,19 @@
-Unterschied > vs >>?
+### Unterschied `>` vs `>>`
 
+- `>`: leitet stdout in eine Datei um und überschreibt den Inhalt (truncate).
+- `>>`: leitet stdout in eine Datei um und hängt an (append), ohne zu überschreiben.
 
->: Hierbei wird ein Output in ein file umgeleitet. Steht in der Datei bereits etwas, so wird es überschrieben.
+### Nur `stderr` umleiten
 
->>: leitet den output ebenfalls in ein File um, doch überschreibt die Daten im File nicht sondern hängt sie hinten an (append).
+- Nur stderr in Datei: `cmd 2> errors.log`
+- stderr anhängen: `cmd 2>> errors.log`
+- stderr verwerfen: `cmd 2>/dev/null`
+- `2>&1` bedeutet: stderr (2) geht dahin, wo stdout (1) hinzeigt (Reihenfolge wichtig).
 
+### Warum `pgrep -a` oft besser ist als `ps | grep`
 
-Wie leitest du nur stderr um?
-
-Der stderr kommt über fd2 (File Descriptor2) um ihn auf fd1 umzuleiten benötigt man den Befehl: 2>&1. Dies funktioniert natürlich auch in die andere Richtung.
-
-Warum ist pgrep -a oft besser als ps | grep?
-
-pgrep wurde für diesen Jop gebaut (Prozesse suchen), darum hat er gewisse Vorteilewie: 
-
-Kein „grep findet sich selbst“-Problem
-Direkte PID-Ausgabe (maschinenfreundlich)
--a zeigt direkt die komplette Kommandozeile
-
-
+- Kein “grep findet sich selbst”-Problem
+- Direkte PID-Ausgabe (maschinenfreundlich), auch Count möglich (`-c`)
+- `-a` zeigt die komplette Kommandozeile
+- Optional `-f` für Match auf komplette Kommandozeile
+:
