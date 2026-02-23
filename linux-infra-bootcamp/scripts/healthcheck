@@ -5,7 +5,7 @@ set -euo pipefail
 #How to use
 
 usage() {
-	echo "Benutzung: $0 [-n <prozessname>] [-p <port>] [-l <logfile>] [-c <lines>] [-s <service>] [-h (help)] [-d (debug)]"
+	echo "Benutzung: $0 [-n <prozessname>] [-p <port>] [-l <logfile>] [-c <lines>] [-s <service>] [-u <URL>] [-h (help)] [-d (debug)]"
 	echo "Beispiele:"
 	echo "  $0 -n python3"
 	echo "  $0 -p 8000"
@@ -21,6 +21,7 @@ log=""
 lines="50"
 service=""
 code=0
+url=""
 
 DEBUG=0
 
@@ -28,6 +29,7 @@ proc_rc=0
 port_rc=0
 log_rc=0
 scan_rc=0
+status_rc=0
 
 main(){
 
@@ -37,7 +39,7 @@ main(){
 	port_check    || port_rc=$?
 	log_show      || log_rc=$?
 	log_scan      || scan_rc=$?
-
+	http_status   || status_rc=$?
       	
 	summary
 }
@@ -48,13 +50,14 @@ arg_parsing(){
 
 	#Getops sets the record straight!
 
-	while getopts ":n:p:l:c:s:hd" opt; do
+	while getopts ":n:p:l:c:s:u:hd" opt; do
 		case "$opt" in
 			n)proc_name="$OPTARG";;
 			p)port="$OPTARG";;
 			l)log="$OPTARG";;
 			c)lines="$OPTARG";;
 			s)service="$OPTARG";;
+			u)url="$OPTARG";;
 			h)usage; exit 0 ;;
 			d)DEBUG=1;;
 			\?) echo "Unbekannte Option: -$OPTARG"; usage; exit 2 ;;
@@ -78,7 +81,8 @@ arg_parsing(){
 	[[ -n "$proc_name"  ]] && ((count += 1))
 	[[ -n "$port"  ]] && ((count += 1))
 	[[ -n "$log"   ]] && ((count += 1))
-	 [[ -n "$service"   ]] && ((count += 1))
+	[[ -n "$service"   ]] && ((count += 1))
+	 [[ -n "$url"   ]] && ((count += 1))
 
 	# Rules:
 	# - not 0
@@ -114,7 +118,7 @@ arg_parsing(){
 
 	if [[ "$DEBUG" == "1" ]]; then
   		
-		echo "[INFO] n=$proc_name p=$port l=$log s=$service c=$lines"
+		echo "[INFO] n=$proc_name p=$port l=$log s=$service c=$lines u=$url"
 	
 	fi
 
@@ -293,11 +297,42 @@ log_scan(){
 
 }
 
+http_status(){
+
+	local sc=0
+
+	if [[ -n "${url:-}" ]]; then
+		sc=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+
+		if (( sc >= 200 && sc < 400 )); then
+			
+			echo "[OK] Statuscode $sc"
+			return 0
+		
+		elif (( sc >= 400 && sc < 600 )); then
+	
+	 		echo "[WARN] Statuscode $sc Etwas ist schiefgelaufen."
+			return 1
+
+		else
+	
+			echo "[CRIT] Statuscode $sc Kritischer Fehler!"
+			return 2
+	
+		fi
+	else
+
+    		echo "[SKIP] Kein URL angegeben"
+    		return 0
+ 	
+	fi
+}
+
 summary(){
 	
 	if [[ "$DEBUG" == "1" ]]; then
   	
-		 echo "[INFO] rc: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+		 echo "[INFO] rc: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc url=$status_rc"
 	fi
 	
 	
@@ -306,7 +341,7 @@ summary(){
 
 	code=0
 
-	for check_rc in "$proc_rc" "$port_rc" "$log_rc" "$scan_rc"; do
+	for check_rc in "$proc_rc" "$port_rc" "$log_rc" "$scan_rc" "$status_rc"; do
     	
 		if (( check_rc == 2 )); then
     	
@@ -323,15 +358,15 @@ summary(){
 
 	if (( code == 2 )); then
 
-        	echo "[CRIT] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+        	echo "[CRIT] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc url=$status_rc"
 
 	elif (( code == 1 )); then
 
-	        echo "[WARN] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+	        echo "[WARN] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc url=$status_rc"
 
 	else
 
-	        echo "[OK] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc"
+	        echo "[OK] summary: proc=$proc_rc port=$port_rc logs=$log_rc scan=$scan_rc url=$status_rc"
 
 	fi
 
