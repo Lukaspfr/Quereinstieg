@@ -2,3 +2,51 @@
 lab/**/*.log
 lab/**/tmp/
 bashlernen/
+
+
+# ---- Secrets / Credentials ----
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+id_*
+*.kdbx
+*.ovpn
+
+# SSH (falls jemals versehentlich kopiert)
+.ssh/
+
+# ---- Logs / temporary files ----
+*.log
+!lab/text/access.log
+*.tmp
+tmp/
+temp/
+
+# ---- OS / editor junk ----
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ---- Python (falls du später was mit Python machst) ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+.envrc
+
+# ---- Node (falls später mal JS) ----
+node_modules/
+
+# ---- WSL / Linux junk (selten, aber safe) ----
+.cache/
+
+# ---- Optional: Lab "fake secrets" ----
+# If you don't want example files like lab/perms/secret.txt on GitHub, uncomment:
+# lab/perms/secret.txt
