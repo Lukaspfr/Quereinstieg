@@ -20,7 +20,7 @@ id_*
 
 # ---- Logs / temporary files ----
 *.log
-!lab/text/access.log
+
 *.tmp
 tmp/
 temp/
@@ -50,3 +50,4 @@ node_modules/
 # ---- Optional: Lab "fake secrets" ----
 # If you don't want example files like lab/perms/secret.txt on GitHub, uncomment:
 # lab/perms/secret.txt
+!lab/text/access.log
