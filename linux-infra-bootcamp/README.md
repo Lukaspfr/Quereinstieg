@@ -1,12 +1,12 @@
-# Quereinstieg – Linux/Infra Bootcamp (WSL)
+# Linux Infra Bootcamp (WSL)
 
 
-Dieses Repo dokumentiert meinen Quereinstieg Richtung **Junior Linux/System/Infrastructure** (Einstieg Richtung Platform/DevOps).
+Dieser Bootcamp-Bereich dokumentiert meinen strukturierten Aufbau von Linux-/Infra-Kompetenzen im Rahmen meines Quereinstiegs.
 Ich arbeite mit **Ubuntu in WSL** und baue ein solides Fundament in Linux, Debugging und Tooling auf – inkl. “Proof of Practice” Scripts.
 
 
 ## Ziele
-- In 2–3 Wochen bewerbungs- und interviewfähig werden (Junior Linux/System/Infra)
+- Solides Linux-Basiswissen für den Weg zum System Engineer / Platform Engineer (Junior Linux/System/Infra)
 - Linux-Fundament: Filesystem, Permissions, Users/Groups, PATH, Debugging
 - Kleine Tools bauen & sauber dokumentieren (GitHub-tauglich)
 
@@ -14,27 +14,19 @@ Ich arbeite mit **Ubuntu in WSL** und baue ein solides Fundament in Linux, Debug
 ## Repo-Struktur (Auszug)
 
 ```text
-Quereinstieg/
+linux-infra-bootcamp/
 ├─ README.md
-├─ lab/
-│  ├─ fs/                  # Filesystem-Übungen (find, links, etc.)
-│  ├─ perms/               # Permissions/umask-Übungen
-│  └─ text/                # Test-Logs & Textfiles für grep/awk/sed Übungen
-├─ lernen/
-│  ├─ LinuxBefehle.md
-│  ├─ Tag1/ ... Tag5/       # Tagesaufgaben, Quiz, Interviewfragen, Debugging-Notes
-└─ linux-infra-bootcamp/
-   └─ scripts/
-      ├─ healthcheck        # Highlight: WSL-tauglicher Healthcheck
-      └─ parts/             # Teilskripte, aus denen healthcheck zusammengebaut wurde
+├─ notes/
+├─ tasks/
+└─ scripts/
+   ├─ healthcheck
+   └─ parts/
 ```
-
-> Hinweis: Der Ordner lab/ enthält bewusst Übungsdateien (auch “dummy logs”), um Befehle realistisch zu testen.
 
 
 ## Highlight: healthcheck (WSL-tauglich)
 
-linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional prüft:
+scripts/healthcheck ist ein kleines CLI-Tool, das optional prüft:
 
 - Prozess (via `pgrep`)
 
@@ -47,24 +39,24 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 
 ## Usage
 
-`./linux-infra-bootcamp/scripts/healthcheck [-n <prozessname>] [-p <port>] [-l <logfile>] [-s <service>] [-c <lines>] [-d (debug)] [-h (help)]`
+`./scripts/healthcheck [-n <prozessname>] [-p <port>] [-l <logfile>] [-s <service>] [-c <lines>] [-d (debug)] [-h (help)]`
 
 ## Beispiele
 
 ### Port check
-`./linux-infra-bootcamp/scripts/healthcheck -p 8080`
+`./scripts/healthcheck -p 8080`
 
 ### Prozess check
-`./linux-infra-bootcamp/scripts/healthcheck -n bash`
+`./scripts/healthcheck -n bash`
 
 ### Logs aus Datei + Scan
-`./linux-infra-bootcamp/scripts/healthcheck -l /tmp/app.log -c 50`
+`./scripts/healthcheck -l /tmp/app.log -c 50`
 
 ### Service-Logs (nur falls journalctl in WSL verfügbar ist)
-`./linux-infra-bootcamp/scripts/healthcheck -s nginx -c 50`
+`./scripts/healthcheck -s nginx -c 50`
 
 ### Debug output
-`./linux-infra-bootcamp/scripts/healthcheck -d -p 8080`
+`./scripts/healthcheck -d -p 8080`
 
 
 ## Exit Codes
@@ -79,7 +71,7 @@ linux-infra-bootcamp/scripts/healthcheck ist ein kleines CLI-Tool, das optional 
 ## WSL Hinweis (systemd/journalctl)
 
 Je nach WSL-Setup sind `systemd/systemctl/journalctl` nicht immer verfügbar.
-Das Tool ist daher Fallback-first: Logs können über `-l <logfile>` oder (falls vorhanden) `/var/log/syslog` bzw. `/var/log/messages` gelesen werden.
+Das Tool ist daher Fallback orientiert: Logs können über `-l <logfile>` oder (falls vorhanden) `/var/log/syslog` bzw. `/var/log/messages` gelesen werden.
 
 
 ## How to run (optional: als Command)
@@ -91,10 +83,11 @@ ln -sf "$PWD/linux-infra-bootcamp/scripts/healthcheck" "$HOME/bin/healthcheck"
 healthcheck -h
 ```
 
-## Lernen / Dokumentation
+## Aufgaben / Dokumentation
 
-Die Tagesdokumentation inkl. Quiz & Interviewdrills liegt unter:
+Die strukturierten Tagesaufgaben und Übungen befinden sich unter:
 
-- lernen/Tag1 bis lernen/Tag5
+- tasks/Tag1 – Tag6
+- notes/ (LinuxBefehle, Debugging, Logs etc.)
 
 
