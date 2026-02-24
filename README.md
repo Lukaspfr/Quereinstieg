@@ -80,7 +80,7 @@ Parallel baue ich Windows-/Server-Kompetenzen auf:
 * Windows Netzwerk-Diagnose
 * Active Directory Grundkonzepte (Users, Groups, OU, GPO Basics)
 
-Ziel: solides Windows-Admin-Fundament als Ergänzung zur Linux-Seite.
+Ziel: solides Windows-Admin-Fundament.
 
 ---
 
