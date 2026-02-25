@@ -1,0 +1,32 @@
+Warum heissen PowerShell-Befehle Verb-Noun?
+
+Unter Verb- Noun versteht man das Design der Befehle. Das Verb ist eine Art Vorwort. Es macht es sehr leicht abzulesen was ein Befehl tut:
+
+
+“Ich will anzeigen” -> Get-*
+
+“Ich will starten” -> Start-*
+
+“Ich will stoppen” -> Stop-*
+
+“Ich will ändern” -> Set-*
+
+“Ich will neu starten” -> Restart-*
+
+
+Das Noun ist dann der andere Teil:
+
+Process, Service etc
+
+
+PowerShell arbeitet mit Objekten, und Verb-Noun passt zu “Operation auf Objektart”:
+
+- Verb = Aktion (Get/Set/New/Remove/…)
+
+- Noun = Ziel/Resource (Service/Process/Item/User/…)
+
+- Pipeline verbindet die Objekte sauber weiter.
+
+Was ist der Vorteil gegenüber Linux-Befehlen?
+
+Die PowerShell pipeline leitet wirkliche Objekte weiter und nicht nur Text. Dies macht es möglich jene Objekte direkt weiterzuverwenden.
