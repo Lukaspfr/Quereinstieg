@@ -96,9 +96,23 @@ Ein Service ist nicht automatisch “ein eigener Prozess”. Er kann:
 
 
 
-Da es sich um User-Apps etc handelt, verliert man beim NNeustarten gewisse Informationen. 
+Da es sich um User-Apps etc handelt, verliert man beim Neustarten gewisse Informationen.
+
+
+
+**Was ist $\_?**
+
+
+
+$\_ ist die Variable für jedes Objekt das durch die Pipeline gereicht wurde. -> Pipeline ist wie ein Stream
 
 
 
 
+
+**Warum ist Pipeline-Denken mächtig?**
+
+
+
+Man verarbeited die Objekte weiter in PowerShell, somit kann man sie auch direkt weiterverwenden.
 
