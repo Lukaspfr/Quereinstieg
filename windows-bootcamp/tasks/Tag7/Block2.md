@@ -1,8 +1,4 @@
-**---**
-
-
-
-**# BLOCK 2 – Gruppen \& GPO**
+**# Block 2 – Gruppen \& GPO**
 
 
 
@@ -10,19 +6,17 @@
 
 
 
-**Eine Security Group wird zur Vergabe von Berechtigungen verwendet.**
+**Eine \*\*Security Group\*\* wird zur Vergabe von Berechtigungen verwendet.**
 
 
 
-**Beispiel:**
+**\*\*Beispiele:\*\***
 
+**- Zugriff auf `\\\\fileserver\\HR`**
 
+**- Zugriff auf Anwendungen**
 
-**\* Zugriff auf \\fileserver\\HR**
-
-**\* Zugriff auf Anwendungen**
-
-**\* Zugriff auf Drucker**
+**- Zugriff auf Drucker**
 
 
 
@@ -34,11 +28,11 @@
 
 
 
-**Eine Distribution Group dient nur zur E-Mail-Verteilung.**
+**Eine \*\*Distribution Group\*\* dient nur zur E-Mail-Verteilung.**
 
 
 
-**Sie kann keine Berechtigungen vergeben.**
+**Sie kann \*\*keine\*\* Berechtigungen vergeben.**
 
 
 
@@ -50,17 +44,15 @@
 
 
 
-**Lokale Gruppen existieren nur auf einem einzelnen Computer.**
+**\*\*Lokale Gruppen\*\* existieren nur auf einem einzelnen Computer.**
 
 
 
-**Beispiel:**
+**\*\*Beispiele:\*\***
 
+**- Lokale Administratoren**
 
-
-**\* Lokale Administratoren**
-
-**\* Lokale Benutzer**
+**- Lokale Benutzer**
 
 
 
@@ -80,9 +72,9 @@
 
 
 
-**\* Wird zur Vergabe von Berechtigungen auf Ressourcen innerhalb der Domain verwendet.**
+**- Wird zur Vergabe von Berechtigungen auf Ressourcen \*\*innerhalb der Domain\*\* verwendet.**
 
-**\* Mitglieder können aus beliebigen Domains stammen.**
+**- Mitglieder können aus \*\*beliebigen Domains\*\* stammen.**
 
 
 
@@ -90,9 +82,9 @@
 
 
 
-**\* Enthält Mitglieder aus der eigenen Domain.**
+**- Enthält Mitglieder aus der \*\*eigenen Domain\*\*.**
 
-**\* Wird typischerweise für Benutzergruppen verwendet.**
+**- Wird typischerweise für \*\*Benutzergruppen\*\* verwendet.**
 
 
 
@@ -100,9 +92,9 @@
 
 
 
-**\* Mitglieder können aus mehreren Domains stammen.**
+**- Mitglieder können aus \*\*mehreren Domains\*\* stammen.**
 
-**\* Wird in Multi-Domain-Umgebungen genutzt.**
+**- Wird in \*\*Multi-Domain-Umgebungen\*\* genutzt.**
 
 
 
@@ -110,15 +102,13 @@
 
 
 
-**## Szenario: HR braucht Zugriff auf \\fileserver\\HR**
+**## Szenario: HR braucht Zugriff auf `\\\\fileserver\\HR`**
 
 
 
-**Lösung:**
+**\*\*Lösung:\*\***
 
-
-
-**1. Security Group „HR“ erstellen.**
+**1. Security Group \*\*„HR“\*\* erstellen.**
 
 **2. Diese Gruppe auf dem Fileserver-Ordner berechtigen.**
 
@@ -138,23 +128,21 @@
 
 
 
-**Eine GPO ist eine Richtlinie, die Einstellungen für Benutzer oder Computer steuert.**
+**Eine \*\*GPO\*\* ist eine Richtlinie, die Einstellungen für Benutzer oder Computer steuert.**
 
 
 
-**Beispiele:**
+**\*\*Beispiele:\*\***
 
+**- Passwortregeln**
 
+**- Desktop-Einstellungen**
 
-**\* Passwortregeln**
+**- Sicherheitsrichtlinien**
 
-**\* Desktop-Einstellungen**
+**- Softwareverteilung**
 
-**\* Sicherheitsrichtlinien**
-
-**\* Softwareverteilung**
-
-**\* Netzlaufwerk-Mapping**
+**- Netzlaufwerk-Mapping**
 
 
 
@@ -172,13 +160,11 @@
 
 **Eine GPO wird an:**
 
+**- OU**
 
+**- Domain**
 
-**\* OU**
-
-**\* Domain**
-
-**\* Site**
+**- Site**
 
 
 
@@ -199,12 +185,4 @@
 
 
 **Sie erlaubt zentrale, konsistente Verwaltung.**
-
-
-
-**---**
-
-
-
-
 
